@@ -1,0 +1,6 @@
+{
+  "texture":"BS.png",
+  "hoverTexture":"BS_Hover.png",
+  "launchCommand":"launch_StockUI",
+  "default":true
+}

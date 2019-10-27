@@ -114,11 +114,13 @@ launch_BootMenu(){
       chmod +x "$bleemsync_ui_app" && $bleemsync_ui_app >> "$runtime_log_path/bleemsync_ui.log" 2>&1 &
     fi
   fi
+  local autoBoot="--auto-boot"
+  [ -f "/var/volatile/bm_booted.flag" ] && autoBoot="" || touch "/var/volatile/bm_booted.flag"
   # Run BootMenu
   if [ "$boot_menu_music" = "1" ]; then
-    $bleemsync_path/bin/boot_menu --image-folder "$images_path" --music-folder "$sounds_path/" --theme-folder "$themes_path/$selected_theme/boot" --default-cfg-file "$bleemsync_path/etc/bleemsync/CFG/bleemsync_cfg_DEFAULT.INI" --cfg-file "$bleemsync_path/etc/bleemsync/CFG/bleemsync_cfg.INI" --ui-themes-folder "$themes_path"
+    $bleemsync_path/bin/boot_menu --image-folder "$images_path" --music-folder "$sounds_path/" --theme-folder "$themes_path/$selected_theme/menu_files" --default-cfg-file "$bleemsync_path/etc/bleemsync/CFG/bleemsync_cfg_DEFAULT.INI" --cfg-file "$bleemsync_path/etc/bleemsync/CFG/bleemsync_cfg.INI" --ui-themes-folder "$themes_path" --boot-menu-folder "$bleemsync_path/etc/boot_menu" $autoBoot >> "$mountpoint/logs/boot_menu.log" 2>&1
   else
-    $bleemsync_path/bin/boot_menu --image-folder "$images_path" --theme-folder "$themes_path/$selected_theme/boot" --default-cfg-file "$bleemsync_path/etc/bleemsync/CFG/bleemsync_cfg_DEFAULT.INI" --cfg-file "$bleemsync_path/etc/bleemsync/CFG/bleemsync_cfg.INI" --ui-themes-folder "$themes_path"
+    $bleemsync_path/bin/boot_menu --image-folder "$images_path" --theme-folder "$themes_path/$selected_theme/menu_files" --default-cfg-file "$bleemsync_path/etc/bleemsync/CFG/bleemsync_cfg_DEFAULT.INI" --cfg-file "$bleemsync_path/etc/bleemsync/CFG/bleemsync_cfg.INI" --ui-themes-folder "$themes_path" --boot-menu-folder "$bleemsync_path/etc/boot_menu" $autoBoot >> "$mountpoint/logs/boot_menu.log" 2>&1
   fi
 }
 
