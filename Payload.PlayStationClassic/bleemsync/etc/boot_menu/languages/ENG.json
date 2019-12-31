@@ -22,9 +22,6 @@
   "boot_splash": "Display BleemSync Splash Screen",
   "boot_quick": "Interrupt Sony Boot Animation",
   "boot_disable_health": "Disable Health Warning",
-  "boot_target_stock_UI": "Boot to Stock UI",
-  "boot_target_stock_RA": "Boot to RetroArch",
-  "boot_target_stock_BM": "Boot to Boot Menu",
   "ui_app_launchers": "Display App Launchers in Carousel",
   "override_theme_music": "Custom Theme Music",
   "random_theme_onload": "Load Random Theme",
@@ -32,5 +29,7 @@
   "set_gaadata_writable": "Enable Write Access to GAADATA",
   "enable_networking": "Network Support",
   "selected_theme": "Selected Theme",
-  "skip_bootup_checks": "Skip Backup Verification on Boot"
+  "skip_bootup_checks": "Skip Backup Verification on Boot",
+  "autobooting": "Auto Booting",
+  "cancel": "Cancel"
 }
