@@ -44,5 +44,5 @@ sdl_text(){
   text_font="/usr/share/fonts/ttf/LiberationMono-Regular.ttf"
   text_bg="0x7E000000"
   [ -f "$themes_path/$selected_theme/menu_files/Boot/splashscreen.png" ] && background="$themes_path/$selected_theme/menu_files/Boot/splashscreen.png" || background="$bleemsync_path/etc/bleemsync/IMG/splashscreen.png"
-  "$bleemsync_path/bin/sdl_text_display" "$1" $text_x $text_y $text_size $text_font 255 255 255 $background $text_bg
+  SDL_VIDEODRIVER=wayland "$bleemsync_path/bin/sdl_text_display" "$1" $text_x $text_y $text_size $text_font 255 255 255 $background $text_bg
 }

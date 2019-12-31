@@ -35,7 +35,7 @@ fi
 if [ ! -f "$tmpcommand" ]; then
   touch "$tmpcommand"
   #Execute to FrameBuffer and clean up
-  $bleemsync_path/bin/sdl_display -file $tmpcommand &> /dev/null && rm -f $tmpcommand &
+  SDL_VIDEODRIVER=wayland $bleemsync_path/bin/sdl_display -file $tmpcommand &> /dev/null && rm -f $tmpcommand &
 fi
 
 #Create SDL DISPLAY INPUT
