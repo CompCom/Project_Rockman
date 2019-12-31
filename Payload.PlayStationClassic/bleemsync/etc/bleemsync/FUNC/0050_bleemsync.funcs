@@ -281,7 +281,7 @@ setup_StockUI() {
   if [ -f "$bleemsync_path/etc/bleemsync/CFG/selected_folder" ]; then
     start=$(date +%s%N)
 
-    emmc_game_ids=(`"$bleemsync_path/bin/sqlite3" "$bleemsync_path/etc/bleemsync/SYS/databases/stockRegional.db" -cmd "SELECT GAME_ID FROM FOLDER_ITEMS WHERE FOLDER_ID = $selected_folder" ".quit"`)
+    [ -f "$bleemsync_path/etc/bleemsync/SYS/databases/stockRegional.db" ] && emmc_game_ids=(`"$bleemsync_path/bin/sqlite3" "$bleemsync_path/etc/bleemsync/SYS/databases/stockRegional.db" -cmd "SELECT GAME_ID FROM FOLDER_ITEMS WHERE FOLDER_ID = $selected_folder" ".quit"`)
     if [ ! -z "$emmc_game_ids" ]; then
       media_gaadata_count=`"$bleemsync_path/bin/sqlite3" "${VOL_GAADATA}/databases/regional.db" -cmd "SELECT GAME_ID FROM MENU_ENTRIES ORDER BY GAME_ID DESC LIMIT 1" ".quit"`
       [ -z "$media_gaadata_count" ] && media_gaadata_count=0
@@ -600,7 +600,7 @@ execute_bleemsync_func(){
 
   # Debug cleanup
   umount /etc/udev/rules.d/20-joystick.rules
-  if [ "$boot_disable_health" = "1" ]; then umount /usr/sony/bin/ui_menu; fi
+  [ "$boot_disable_health" = "1" ] && umount /usr/sony/bin/ui_menu
   [ "$generate_external_game_playlist" = "1" ] && umount "$retroarch_path/config/retroarch/thumbnails/PlayStation Classic - External"
 #-----------------------------------------------------------------------------#
   sync
