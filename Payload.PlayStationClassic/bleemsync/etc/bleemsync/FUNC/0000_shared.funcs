@@ -20,6 +20,11 @@
 # ModMyClassic.com / https://discordapp.com/invite/8gygsrw
 ###############################################################################
 
+display_crash_message() {
+  [ -z "$crash_image" ] && crash_image="$bleemsync_path/etc/bleemsync/IMG/woah.png"
+  SDL_VIDEODRIVER=wayland "$bleemsync_path/bin/sdl_text_display" "$1" 640 120 16 "/usr/share/fonts/ttf/LiberationMono-Regular.ttf" 255 255 255 "$crash_image" "0x7E000000"
+}
+
 pretty_logo_func(){ #ASCII PORN
 	bin="$bleemsync_path/etc/bleemsync/SUP/scripts/show_logo"
 	chmod +x "$bin" && "$bin"

@@ -67,10 +67,10 @@ launch_retroarch(){
     fi
   else
     # FAIL catch
-    $bleemsync_path/bin/sdl_display "$bleemsync_path/etc/bleemsync/IMG/woah.png" &
-    sleep 1
+    display_crash_message "RetroArch install folder is missing."
+    sleep 5
     echo "[BLEEMSYNC](FAIL) tried to launch retroarch and it's not installed! Opening Stock ui..."
-    killall -s KILL sdl_display &> "/dev/null"
+    killall -s TERM sdl_display &> "/dev/null"
     echo launch_StockUI > "/tmp/launchfilecommand"
   fi
 }
@@ -223,8 +223,8 @@ setup_StockUI() {
     # FAIL catch
     echo 0 > /sys/class/leds/green/brightness
     echo 1 > /sys/class/leds/red/brightness
-    $bleemsync_path/bin/sdl_display "$bleemsync_path/etc/bleemsync/IMG/woah.png" &
-    sleep 1
+    display_crash_message "Failed to overmount pcsx binary."
+    sleep 5
     sync
     reboot
     exit 1
@@ -530,13 +530,11 @@ execute_bleemsync_func(){
   # Check for regional database
   if [ ! -f "$bleemsync_path/etc/bleemsync/SYS/databases/regional.db" ]; then
     echo "[BLEEMSYNC](ERROR) regional database has not been created."
-    #display error message
-    sdl_text "Could not create regional database."
-    sleep 2
     echo 0 > /sys/class/leds/green/brightness
     echo 1 > /sys/class/leds/red/brightness
-    $bleemsync_path/bin/sdl_display "$bleemsync_path/etc/bleemsync/IMG/woah.png" &
-    sleep 1
+    #display error message
+    display_crash_message "Could not create regional database."
+    sleep 5
     sync
     reboot
     exit 1

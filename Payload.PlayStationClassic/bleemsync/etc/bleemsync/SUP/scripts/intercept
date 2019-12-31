@@ -182,6 +182,16 @@ echo "[INTERCEPT](PROFILE) extracting arguments took: $(((end_arg-start_arg)/100
 
 
 if [ "$launch_ra_from_stock_UI" = "1" ]; then
+
+  if [ "$display_ra_loading_screen" = "1" ]; then
+    # Display Loading Screen
+    if [ -f "$themes_path/$selected_theme/menu_files/ra_loading.png" ]; then
+      "$bleemsync_path/bin/sdl_display" "$themes_path/$selected_theme/menu_files/ra_loading.png" &
+    elif [ -f "$themes_path/$selected_theme/images/GR/JP_US_BG.png" ]; then
+      "$bleemsync_path/bin/sdl_display" "$themes_path/$selected_theme/images/GR/JP_US_BG.png" &
+    fi
+  fi
+
   echo "[INTERCEPT](INFO) RetroArch is enabled as the emulator"
   # Swap stock multi disc game path to an .m3u for better disc swap support in RetroArch
   case "$intercept_game_id" in

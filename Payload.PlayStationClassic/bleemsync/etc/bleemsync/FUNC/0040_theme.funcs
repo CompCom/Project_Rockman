@@ -80,6 +80,22 @@ select_UI_theme(){
     overlay_folder /var/volatile/theme /usr/sony/share/data
     [ "$random_theme_onload" = "1" ] && echo "$selected_theme" > "$last_theme"
   fi
+  
+  # Overmount launcher images with theme variant
+  if [ -d "$themes_path/$selected_theme/launchers" ]; then
+    cd "$themes_path/$selected_theme/launchers"
+    find -mindepth 2 -maxdepth 2 -name "*.png" | while read imageName; do
+      if [ -e "$bleemsync_path/etc/bleemsync/SUP/launchers/$imageName" ]; then
+        mount -o bind "$imageName" "$bleemsync_path/etc/bleemsync/SUP/launchers/$imageName"
+      fi
+    done
+  fi
+  
+  # Set theme version of crash image
+  if [ -f "$themes_path/$selected_theme/menu_files/Boot/woah.png" ]; then
+    crash_image="$themes_path/$selected_theme/menu_files/Boot/woah.png"
+  fi
+  
   # log if stuff is found or not
   if [ "$found_theme" == "1" ]; then
     echo "[BLEEMSYNC](INFO)(theme) set theme to '$selected_theme' theme"

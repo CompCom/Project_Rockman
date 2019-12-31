@@ -19,6 +19,7 @@
   "launch_ra_from_stock_UI": "Launch Games in RA from Stock UI",
   "generate_internal_game_playlist": "Generate RA Playlist for Internal Games",
   "generate_external_game_playlist": "Generate RA Playlist for USB Games",
+  "display_ra_loading_screen": "Display RA Loading Screen",
   "boot_splash": "Display BleemSync Splash Screen",
   "boot_quick": "Interrupt Sony Boot Animation",
   "boot_disable_health": "Disable Health Warning",
