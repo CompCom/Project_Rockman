@@ -107,6 +107,9 @@ suspend_ui_menu
 killall -s TERM auto_dimmer &> /dev/null
 intercept_command=""
 found_cdfile=false
+ra_args=""
+ra_core="pcsx_rearmed_libretro.so"
+ra_game=false
 
 # Loop through each argument to pull out information relating to which game is being loaded
 # and whether this is a Save State load
@@ -126,11 +129,38 @@ do
     intercept_game_ext="${arg##*.}"
     echo "[INTERCEPT](INFO) Game extension: $intercept_game_ext"
 
+    if [ "${intercept_game_id%-*}" = "RA" ]; then
+      requested_core_file=($(ls /data/AppData/sony/title/RACORE-* 2>/dev/null))
+      if [ "${#requested_core_file[@]}" != "1" ]; then
+        echo "[INTERCEPT](ERROR) Cannot find RA Cores"
+        resume_ui_menu
+        exit 1
+      fi
+      requested_core_file="${requested_core_file[0]}"
+      requested_core_file="${requested_core_file##*/}"
+      ra_core="${requested_core_file##*-}"
+      ra_game=true
+      ra_args="--appendconfig /media/bleemsync/opt/retroarch/config/retroarch/ra-game.cfg"
+      echo "[INTERCEPT](INFO) Detected RA Game"
+      echo "[INTERCEPT](INFO) Requested RetroArch Core is $ra_core"
+    fi
+
     # Check if the game exists in an alternative format
     # The game path always has .cue appened to the BASENAME field of the DISC table in regional.db
     # EXCEPT when the game is launched from a Save State. In this case the Game Path is determined from
     # the first line of filename.txt.res in the games PCSX data directory (ie. /data/AppData/sony/pcsx/1/.pcsx/filename.txt.res)
     if [ "$intercept_save_state" = false ]; then
+
+      if [ "$ra_game" = true ]; then
+        intercept_game_path="${arg%.*}"
+        intercept_game_id="${intercept_game_id%.*}"
+        intercept_game_ext="${intercept_game_path##*.}"
+        
+        echo "[INTERCEPT](INFO) RA Game full path: ${intercept_game_path}"
+        echo "[INTERCEPT](INFO) RA Game ID: $intercept_game_id"
+        echo "[INTERCEPT](INFO) RA Game extension: $intercept_game_ext"
+        break
+      fi
 
       start_alt=$(date +%s%N)
       for f in "${intercept_file_formats[@]}"; do
@@ -181,7 +211,7 @@ end_arg=$(date +%s%N)
 echo "[INTERCEPT](PROFILE) extracting arguments took: $(((end_arg-start_arg)/1000000))ms to execute"
 
 
-if [ "$launch_ra_from_stock_UI" = "1" ]; then
+if [ "$launch_ra_from_stock_UI" = "1" ] || [ "$ra_game" = true ]; then
 
   if [ "$display_ra_loading_screen" = "1" ]; then
     # Display Loading Screen
@@ -192,28 +222,30 @@ if [ "$launch_ra_from_stock_UI" = "1" ]; then
     fi
   fi
 
-  echo "[INTERCEPT](INFO) RetroArch is enabled as the emulator"
-  # Swap stock multi disc game path to an .m3u for better disc swap support in RetroArch
-  case "$intercept_game_id" in
-    SCUS-94163|SLPM-86114|SLPS-01057|SLPS-01230|SLUS-00594)
-      if [ "$intercept_game_ext" = "cue" ] && [ "$intercept_save_state" = false ] ; then
-        echo "[INTERCEPT](INFO) This is a stock multi disc game with no .m3u. An .m3u is needed for the best multi disc experience within RetroArch"
-        if [ -f "$bleemsync_path/etc/bleemsync/SUP/retroarch/title/${intercept_game_id}.m3u" ]; then
-          intercept_game_path="$bleemsync_path/etc/bleemsync/SUP/retroarch/title/${intercept_game_id}.m3u"
-          intercept_game_ext="m3u"
-          echo "[INTERCEPT](INFO) New Game full path: ${intercept_game_path}"
-          echo "[INTERCEPT](INFO) New Game extension: ${intercept_game_ext}"
-        else
-          echo "[INTERCEPT](ERROR) an .m3u does not exist at $bleemsync_path/etc/bleemsync/SUP/retroarch/title/${intercept_game_id}.m3u"
-        fi 
-      fi
-      ;;
-  esac
+  if [ "$ra_game" = false ]; then
+    echo "[INTERCEPT](INFO) RetroArch is enabled as the emulator"
+    # Swap stock multi disc game path to an .m3u for better disc swap support in RetroArch
+    case "$intercept_game_id" in
+      SCUS-94163|SLPM-86114|SLPS-01057|SLPS-01230|SLUS-00594)
+        if [ "$intercept_game_ext" = "cue" ] && [ "$intercept_save_state" = false ] ; then
+          echo "[INTERCEPT](INFO) This is a stock multi disc game with no .m3u. An .m3u is needed for the best multi disc experience within RetroArch"
+          if [ -f "$bleemsync_path/etc/bleemsync/SUP/retroarch/title/${intercept_game_id}.m3u" ]; then
+            intercept_game_path="$bleemsync_path/etc/bleemsync/SUP/retroarch/title/${intercept_game_id}.m3u"
+            intercept_game_ext="m3u"
+            echo "[INTERCEPT](INFO) New Game full path: ${intercept_game_path}"
+            echo "[INTERCEPT](INFO) New Game extension: ${intercept_game_ext}"
+          else
+            echo "[INTERCEPT](ERROR) an .m3u does not exist at $bleemsync_path/etc/bleemsync/SUP/retroarch/title/${intercept_game_id}.m3u"
+          fi 
+        fi
+        ;;
+    esac
+  fi
   end=$(date +%s%N)
   echo "[INTERCEPT](PROFILE) up to launching RetroArch took: $(((end-start)/1000000))ms to execute"
   echo -n 2 > /data/power/disable
-  link_ra_memory_cards
-  launch_retroarch_from_StockUI
+  [ "$ra_game" = false ] && link_ra_memory_cards
+  launch_retroarch_from_StockUI "$ra_core" "$ra_args"
   exit_checkSaveState
   resume_ui_menu
   echo -n 1 > /data/power/disable

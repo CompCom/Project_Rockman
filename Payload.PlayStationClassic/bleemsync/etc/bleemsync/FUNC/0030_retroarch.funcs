@@ -73,7 +73,7 @@ launch_retroarch_from_StockUI(){
   echo "[BLEEMSYNC](INFO) Launching RetroArch for game $intercept_game_path"
   end=$(date +%s%N)
   echo "[BLEEMSYNC](PROFILE) RetroArch launch_retroarch_from_StockUI function took: $(((end-start)/1000000))ms to execute (up to launching RetroArch executable)"
-  "$bleemsync_path/etc/bleemsync/SUP/scripts/ra_launch.sh" -v -L "$retroarch_path/config/retroarch/cores/pcsx_rearmed_libretro.so" "$intercept_game_path"
+  "$bleemsync_path/etc/bleemsync/SUP/scripts/ra_launch.sh" -v -L "$retroarch_path/config/retroarch/cores/$1" "$intercept_game_path" $2
   echo "[BLEEMSYNC](INFO) RetroArch exit code $?"
   save_ra_savestates
   rm -fr "/tmp/ra_cache"
