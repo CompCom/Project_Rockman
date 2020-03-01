@@ -1,4 +1,5 @@
 {
   "bool": ["runtime_log", "refresh_logs", "force_redump", "link_EMMC_and_USB", "link_alphabeticalise", "launch_ra_from_stock_UI", "generate_internal_game_playlist", "generate_external_game_playlist", "display_ra_loading_screen", "boot_splash", "boot_quick", "boot_disable_health", "ui_app_launchers", "override_theme_music", "random_theme_onload", "boot_menu_music", "set_gaadata_writable", "enable_networking", "skip_bootup_checks"],
-  "theme": ["selected_theme"]
+  "theme": ["selected_theme"],
+  "language": ["boot_menu_language"]
 }

@@ -118,9 +118,9 @@ launch_BootMenu(){
   [ -f "/var/volatile/bm_booted.flag" ] && autoBoot="" || touch "/var/volatile/bm_booted.flag"
   # Run BootMenu
   if [ "$boot_menu_music" = "1" ]; then
-    SDL_VIDEODRIVER=wayland $bleemsync_path/bin/boot_menu --image-folder "$images_path" --music-folder "$sounds_path/" --theme-folder "$themes_path/$selected_theme/menu_files" --default-cfg-file "$bleemsync_path/etc/bleemsync/CFG/bleemsync_cfg_DEFAULT.INI" --cfg-file "$bleemsync_path/etc/bleemsync/CFG/bleemsync_cfg.INI" --ui-themes-folder "$themes_path" --boot-menu-folder "$bleemsync_path/etc/boot_menu" $autoBoot >> "$mountpoint/logs/boot_menu.log" 2>&1
+    SDL_VIDEODRIVER=wayland $bleemsync_path/bin/boot_menu --image-folder "$images_path" --music-folder "$sounds_path/" --theme-folder "$themes_path/$selected_theme/menu_files" --default-cfg-file "$bleemsync_path/etc/bleemsync/CFG/bleemsync_cfg_DEFAULT.INI" --cfg-file "$bleemsync_path/etc/bleemsync/CFG/bleemsync_cfg.INI" --ui-themes-folder "$themes_path" --boot-menu-folder "$bleemsync_path/etc/boot_menu" --language-file "$bleemsync_path/etc/boot_menu/languages/$boot_menu_language" $autoBoot >> "$mountpoint/logs/boot_menu.log" 2>&1
   else
-    SDL_VIDEODRIVER=wayland $bleemsync_path/bin/boot_menu --image-folder "$images_path" --theme-folder "$themes_path/$selected_theme/menu_files" --default-cfg-file "$bleemsync_path/etc/bleemsync/CFG/bleemsync_cfg_DEFAULT.INI" --cfg-file "$bleemsync_path/etc/bleemsync/CFG/bleemsync_cfg.INI" --ui-themes-folder "$themes_path" --boot-menu-folder "$bleemsync_path/etc/boot_menu" $autoBoot >> "$mountpoint/logs/boot_menu.log" 2>&1
+    SDL_VIDEODRIVER=wayland $bleemsync_path/bin/boot_menu --image-folder "$images_path" --theme-folder "$themes_path/$selected_theme/menu_files" --default-cfg-file "$bleemsync_path/etc/bleemsync/CFG/bleemsync_cfg_DEFAULT.INI" --cfg-file "$bleemsync_path/etc/bleemsync/CFG/bleemsync_cfg.INI" --ui-themes-folder "$themes_path" --boot-menu-folder "$bleemsync_path/etc/boot_menu" --language-file "$bleemsync_path/etc/boot_menu/languages/$boot_menu_language" $autoBoot >> "$mountpoint/logs/boot_menu.log" 2>&1
   fi
 }
 
